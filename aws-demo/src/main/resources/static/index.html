@@ -12,13 +12,37 @@
     <link rel="stylesheet" href="/css/app.css">
 </head>
 <body>
-<h2>Welcome to AWS Demo1</h2>
-<div class="home-section">
-    <ul class="menu-list">
-        <li><a href="#/users">Users</a></li>
-        <li><a href="#/roles">Roles</a></li>
-    </ul>
-</div>
+<h2>Welcome to AWS Demo</h2><br/>
+  <div ng-controller='homeCtrl'>
+    
+    <h4>Since you are seeing this message, <button ng-click='toggleModal();showSectionFn()'>Click here</button> to know what went underneath </h4>
+    <modal-dialog show='modalShown' width='400px' height='60%'>
+      <ol>
+	  	<li>Identity Access Management
+	  		<ul>
+	  			<li>Roles</li>
+	  			<li>Secuity Groups</li>
+	  		</ul>
+	  	</li>
+	  	<li>EC2</li>
+	  	<li>Installing tools on EC2 
+	  		<ul>
+	  			<li>Maven</li>
+	  			<li>Tomcat</li>
+	  			<li>Git</li>
+	  		</ul>
+	  	</li>
+	  </ol>		
+    </modal-dialog>
+    
+    <div class="home-section">
+	    <ul class="menu-list">
+	        <li><a href="#/s3" ng-click='showS3Fn()'>S3</a></li>
+	        <li><a href="#/roles">SQS</a></li>
+	    </ul>
+	</div>
+  </div>
+
 <div ng-view></div>
 <script src="/webjars/angularjs/1.4.9/angular.js"></script>
 <script src="/webjars/angularjs/1.4.9/angular-resource.js"></script>

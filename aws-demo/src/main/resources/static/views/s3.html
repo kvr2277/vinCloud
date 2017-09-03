@@ -1,0 +1,17 @@
+<div ng-show="showS3" class="section">
+	<div  ng-controller="s3Ctrl">
+		
+		 <img ng-src="{{s3DefaultImageSrc}}"> <br/><br/><br/><br/>
+		 <span>Let's upload an image to S3 </span>
+		 <input type="file" file-model="myFile" />
+		 <br/>
+		 <div ng-hide="imageSrc == null">
+		 	<img data-ng-src="data:image/png;base64,{{imageSrc}}" height="200px" width="200px"> <br/>
+		 </div>
+		<button ng-click="uploadFile()">Upload to S3</button>
+		
+		<span ng-bind="{{s3Msg}}" />
+	</div>
+	
+	
+</div>

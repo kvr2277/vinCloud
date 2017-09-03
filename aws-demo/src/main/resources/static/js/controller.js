@@ -1,48 +1,27 @@
-app.directive('fileModel', [ '$parse', function($parse) {
-	return {
-		restrict : 'A',
-		link : function(scope, element, attrs) {
-			var model = $parse(attrs.fileModel);
-			var modelSetter = model.assign;
+app.controller('homeCtrl', ['$scope','$rootScope',  function($scope, $rootScope) {
+	  $scope.modalShown = false;
+	  
+	  $scope.toggleModal = function() {
+	    $scope.modalShown = !$scope.modalShown;	    
+	  };
+	  
+	  $scope.showS3Fn = function() {
+		  $rootScope.$emit('childEmit', true);
+	  };
+	 
+}]);
 
-			element.bind('change', function() {
-				scope.$apply(function() {
-					modelSetter(scope, element[0].files[0]);
-				});
+app.controller('s3Ctrl', [ '$scope', '$http', '$rootScope','$timeout',
+		function($scope, $http, $rootScope, $timeout) {
+
+			$scope.s3DefaultImageSrc = '/images/s3_image.png';
+			$scope.showS3 = false;
+			$scope.s3Msg = "";
+			 
+			 $rootScope.$on('childEmit', function(event, data) {
+				 $scope.showS3 = data;	
 			});
-		}
-	};
-} ]);
-
-app.service('fileUpload', [ '$http', function($http) {
-
-	var resp = null;
-	this.uploadFileToUrl = function(file, uploadUrl) {
-		alert(2);
-		var fd = new FormData();
-
-		fd.append('file', file);
-		$http.post(uploadUrl, fd, {
-			transformRequest : angular.identity,
-			headers : {
-				'Content-Type' : undefined
-			}
-		}).success(function(response) {
-			alert(3);
-			resp = 'abc';
-			return resp;
-		}).error(function() {
-		});
-		alert("resp " + resp);
-	}
-
-} ]);
-
-app.controller('myCtrl', [ '$scope', '$http', 'fileUpload',
-		function($scope, $http, fileUpload) {
-
-			$scope.myImgSrc = '/images/images.jpeg';
-
+			 
 			$scope.uploadFile = function() {
 
 				var file = $scope.myFile;
@@ -50,8 +29,7 @@ app.controller('myCtrl', [ '$scope', '$http', 'fileUpload',
 				console.log('file is ');
 				console.dir(file);
 
-				var uploadUrl = "/image";
-				
+				var uploadUrl = "/uploadToS3";
 				var fd = new FormData();
 				var resp = null;
 				fd.append('file', file);
@@ -62,17 +40,36 @@ app.controller('myCtrl', [ '$scope', '$http', 'fileUpload',
 					headers : {
 						'Content-Type' : undefined
 					}
-				}).success(function(response) {
-					
-					resp = 'abc';
-					
+				}).success(function(response) {	
+					$scope.s3Msg = "successfully uploaded to S3";					
 					$scope.imageSrc = response;
-					
-				}).error(function() {
-				
-					
+					alert("successfully uploaded to S3");					
+				}).error(function() {				
+					alert("something went wrong");
 				});
-
-				$scope.name = 'good';
 			};
-		} ]);
+}]);
+
+
+
+app.directive('modalDialog', function() {
+	  return {
+	    restrict: 'E',
+	    scope: {
+	      show: '='
+	    },
+	    replace: true, // Replace with the template below
+	    transclude: true, // we want to insert custom content inside the directive
+	    link: function(scope, element, attrs) {
+	      scope.dialogStyle = {};
+	      if (attrs.width)
+	        scope.dialogStyle.width = attrs.width;
+	      if (attrs.height)
+	        scope.dialogStyle.height = attrs.height;
+	      scope.hideModal = function() {
+	        scope.show = false;
+	      };
+	    },
+	    template: "<div class='ng-modal' ng-show='show'><div class='ng-modal-overlay' ng-click='hideModal()'></div><div class='ng-modal-dialog' ng-style='dialogStyle'><div class='ng-modal-close' ng-click='hideModal()'>X</div><div class='ng-modal-dialog-content' ng-transclude></div></div></div>"
+	  };
+	});

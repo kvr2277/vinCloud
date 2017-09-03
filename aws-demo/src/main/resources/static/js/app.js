@@ -1,9 +1,9 @@
 var app = angular.module('app', ['ngRoute','ngResource']);
 app.config(function($routeProvider){
     $routeProvider
-        .when('/users',{
-            templateUrl: '/views/users.html',
-            controller: 'myCtrl'
+        .when('/s3',{
+            templateUrl: '/views/s3.html',
+            controller: 's3Ctrl'
         })
         .when('/roles',{
             templateUrl: '/views/roles.html',
