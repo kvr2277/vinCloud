@@ -1,5 +1,5 @@
 # vinzone
 @Author: Vinod Reddy Kisanagaram
 
-Project: AWS - DEMO
-  Exploring EC2, S3, SQS, SNS, Lambda using Spring Boot and Angular
+<b> Project: AWS - DEMO </b> <br/>
+ Exploring EC2, S3, SQS, SNS, DynamoDB, RDS, Lambda using Spring Boot and Angular
