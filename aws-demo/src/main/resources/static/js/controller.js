@@ -61,8 +61,8 @@ app.controller('s3Ctrl', [ '$scope', '$http', '$rootScope','$timeout',
 				console.log('file is ');
 				console.dir(file);
 
-				var uploadUrl = "/uploadAndRetrieveFromLocalMachine";
-				//var uploadUrl = "/uploadToS3";
+				//var uploadUrl = "/uploadAndRetrieveFromLocalMachine";
+				var uploadUrl = "/uploadToS3";
 				var fd = new FormData();
 				var resp = null;
 				//below is the file name that gets pushed to controller
