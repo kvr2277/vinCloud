@@ -4,11 +4,11 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.Base64;
 import java.util.Iterator;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.DatatypeConverter;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -94,7 +94,7 @@ public class MainController {
 	}
 
 	@RequestMapping(value = "/uploadAndRetrieveFromLocalMachine", method = RequestMethod.POST)
-	public @ResponseBody byte[] getFile(MultipartHttpServletRequest request) {
+	public @ResponseBody String getFile(MultipartHttpServletRequest request) {
 		try {
 
 			System.out.println(" Inside getFile "+bucketName);
@@ -105,7 +105,7 @@ public class MainController {
 			ImageIO.write(originalImage, "jpg", baos);
 			byte[] imageInByte = baos.toByteArray();
 
-			return Base64.getEncoder().encode(imageInByte);
+			return DatatypeConverter.printBase64Binary(imageInByte);
 
 		} catch (Exception e) {
 			e.printStackTrace();
