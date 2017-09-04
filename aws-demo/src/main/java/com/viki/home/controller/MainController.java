@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import com.amazonaws.services.health.AWSHealth;
 import com.viki.home.aws.util.AWSDemoUtil;
 import com.viki.home.aws.util.AWSS3Helper;
 
@@ -80,29 +81,16 @@ public class MainController {
 			File fileForS3Upload = AWSDemoUtil
 					.getFileFromMultipartHttpServletRequest(request, s3Dir);
 			AWSS3Helper.putFileInS3(fileForS3Upload, bucketName, s3FolderName);
+			
+			String keyName = AWSS3Helper.getKeyNameForFileUsingFolder(fileForS3Upload, s3FolderName);
+			logger.info("keyName "+keyName);
+			byte[] imageInByte = AWSS3Helper.getObjectFromS3(bucketName, keyName);
+
+			return DatatypeConverter.printBase64Binary(imageInByte);
 
 		} catch (Exception e) {
 			logger.error("error while uploadToS3 ", e);
 			throw new RuntimeException(e);
 		}
-
-		return "{\"success\"}";
-	}
-	
-	@RequestMapping(value = "/uploadToS31", method = RequestMethod.POST)
-	public @ResponseBody String uploadToS31(MultipartHttpServletRequest request) {
-		try {
-
-			String s3Dir = AWSDemoUtil.getS3Directory();
-			File fileForS3Upload = AWSDemoUtil
-					.getFileFromMultipartHttpServletRequest(request, s3Dir);
-			AWSS3Helper.putFileInS3UsingKey(bucketName, fileKey, fileForS3Upload);
-
-		} catch (Exception e) {
-			logger.error("error while uploadToS3 ", e);
-			throw new RuntimeException(e);
-		}
-
-		return "{\"success\"}";
 	}
 }

@@ -1,7 +1,9 @@
 package com.viki.home.aws.util;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
@@ -11,9 +13,11 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
+import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 public class AWSS3Helper {
@@ -39,24 +43,14 @@ public class AWSS3Helper {
 		createFolder(bucketName, folderName, s3client);
 
 		// upload file to folder and set it to public
-		String fileName = folderName + SUFFIX + file.getName();
-		PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, fileName, file);
+		String keyName = getKeyNameForFileUsingFolder(file, folderName); 
+		PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, keyName, file);
 		PutObjectResult putObjectResult = s3client.putObject(putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead));
-		
-		
-		logger.info("uploaded file in s3 bucketName "+bucketName+" folderName "+folderName+" fileName "+fileName);
+				
+		logger.info("uploaded file in s3 bucketName "+bucketName+" folderName "+folderName+" keyName "+keyName);
 
 	}
 	
-	public static void putFileInS3UsingKey(String bucketName, String keyName, File file) {
-		logger.info("Inside putFileInS3");
-
-		AmazonS3 s3client = AmazonS3ClientBuilder.defaultClient();
-		PutObjectResult putObjectResult = s3client.putObject(bucketName, keyName, file);		
-		logger.info("uploaded file in s3 bucketName "+bucketName+" keyName "+keyName);
-
-	}
-
 	public static void createFolder(String bucketName, String folderName,
 			AmazonS3 client) {
 		// create meta-data for your folder and set content-length to 0
@@ -85,4 +79,28 @@ public class AWSS3Helper {
 		client.deleteObject(bucketName, folderName);
 	}
 
+	public static String getKeyNameForFileUsingFolder(File file, String folderName){
+		return folderName + SUFFIX + file.getName();		
+	}
+	
+	public static byte[] getObjectFromS3(String bucketName, String keyName) throws IOException {
+		
+		AmazonS3 s3Client = AmazonS3ClientBuilder.defaultClient();       
+		S3Object object = s3Client.getObject(
+		                  new GetObjectRequest(bucketName, keyName));
+		InputStream objectData = object.getObjectContent();
+		// Process the objectData stream.
+		objectData.close();
+		
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		int next = objectData.read();
+		while (next > -1) {
+		    bos.write(next);
+		    next = objectData.read();
+		}
+		bos.flush();
+		byte[] result = bos.toByteArray();
+		
+		return result;
+	}
 }
