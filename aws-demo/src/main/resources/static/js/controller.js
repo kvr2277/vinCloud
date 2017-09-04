@@ -1,9 +1,14 @@
 app.controller('homeCtrl', ['$scope','$rootScope',  function($scope, $rootScope) {
 	  $scope.modalShown = false;
+	  $scope.showSection = false;
 	  
 	  $scope.toggleModal = function() {
 	    $scope.modalShown = !$scope.modalShown;	    
 	  };
+	  
+	  $scope.showSectionFn = function() {
+		    $scope.showSection = true;	    
+		  };
 	  
 	  $scope.showS3Fn = function() {
 		  $rootScope.$emit('childEmit', true);
@@ -13,6 +18,7 @@ app.controller('homeCtrl', ['$scope','$rootScope',  function($scope, $rootScope)
 
 app.controller('s3Ctrl', [ '$scope', '$http', '$rootScope','$timeout',
 		function($scope, $http, $rootScope, $timeout) {
+	
 
 			$scope.s3DefaultImageSrc = '/images/s3_image.png';
 			$scope.showS3 = false;
@@ -29,6 +35,7 @@ app.controller('s3Ctrl', [ '$scope', '$http', '$rootScope','$timeout',
 				console.log('file is ');
 				console.dir(file);
 
+				//var uploadUrl = "/uploadAndRetrieveFromLocalMachine";
 				var uploadUrl = "/uploadToS3";
 				var fd = new FormData();
 				var resp = null;

@@ -12,10 +12,11 @@
     <link rel="stylesheet" href="/css/app.css">
 </head>
 <body>
-<h2>Welcome to AWS Demo</h2><br/>
+  <div align="center"> <h2 >Welcome to AWS Demo</h2></div>
   <div ng-controller='homeCtrl'>
-    
-    <h4>Since you are seeing this message, <button ng-click='toggleModal();showSectionFn()'>Click here</button> to know what went underneath </h4>
+    <div ng-show="!showSection" align="center" style="padding-top: 2cm;">
+    	<h4>Since you are seeing this message, <button ng-click='toggleModal();showSectionFn()'>Click here</button> to know what went underneath </h4>
+    </div>
     <modal-dialog show='modalShown' width='400px' height='60%'>
       <ol>
 	  	<li>Identity Access Management
@@ -35,11 +36,14 @@
 	  </ol>		
     </modal-dialog>
     
-    <div class="home-section">
-	    <ul class="menu-list">
-	        <li><a href="#/s3" ng-click='showS3Fn()'>S3</a></li>
-	        <li><a href="#/roles">SQS</a></li>
-	    </ul>
+    <div ng-show="showSection">
+    	<div ><h4>Select below links to see AWS services in action </h4></div>
+	    <div  class="home-section">
+		    <ul class="menu-list">
+		        <li><a href="#/s3" ng-click='showS3Fn()'>S3</a></li>
+		        <li><a href="#/roles">SQS</a></li>
+		    </ul>
+		</div>
 	</div>
   </div>
 

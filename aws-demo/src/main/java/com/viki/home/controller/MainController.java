@@ -93,7 +93,7 @@ public class MainController {
 		return "{\"success\":1}";
 	}
 
-	@RequestMapping(value = "/image", method = RequestMethod.POST)
+	@RequestMapping(value = "/uploadAndRetrieveFromLocalMachine", method = RequestMethod.POST)
 	public @ResponseBody byte[] getFile(MultipartHttpServletRequest request) {
 		try {
 
