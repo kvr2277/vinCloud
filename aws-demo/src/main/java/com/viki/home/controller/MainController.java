@@ -3,11 +3,8 @@ package com.viki.home.controller;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.util.Iterator;
 
 import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.DatatypeConverter;
 
 import org.apache.log4j.Logger;
@@ -17,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -37,6 +33,9 @@ public class MainController {
 	@Value("${aws.s3.demo.file.key}")
 	private String fileKey;
 	
+	@Value("${local.directory}")
+	private String localDir;
+	
 	private static final Logger logger = Logger.getLogger(MainController.class);
 
 	@Bean
@@ -53,53 +52,13 @@ public class MainController {
 		};
 	}
 
-	@RequestMapping(value = "/upload1", method = RequestMethod.POST, produces = "application/json")
-	public @ResponseBody String uploadToService(
-			MultipartHttpServletRequest request, HttpServletResponse response) {
-
-		System.out.println("success1");
-
-		return "{\"success\":1}";
-	}
-
-	@RequestMapping(value = "/upload", method = RequestMethod.POST)
-	public @ResponseBody String uploadOnSameServer(
-			MultipartHttpServletRequest request, HttpServletResponse response) {
-
-		String reslt = "File Upload Failed";
-		if (request instanceof MultipartHttpServletRequest) {
-			System.out.println(" Inside Multipart");
-
-			Iterator<String> itr = ((MultipartHttpServletRequest) request)
-					.getFileNames();
-
-			MultipartFile mpf = ((MultipartHttpServletRequest) request)
-					.getFile(itr.next());
-
-			File tmpFile = new File("D:\\logs\\" + mpf.getOriginalFilename());
-
-			try {
-				mpf.transferTo(tmpFile);
-			} catch (IllegalStateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			reslt = mpf.getOriginalFilename();
-		}
-
-		return "{\"success\":1}";
-	}
-
 	@RequestMapping(value = "/uploadAndRetrieveFromLocalMachine", method = RequestMethod.POST)
-	public @ResponseBody String getFile(MultipartHttpServletRequest request) {
+	public @ResponseBody String uploadAndRetrieveFromLocalMachine(MultipartHttpServletRequest request) {
 		try {
 
-			System.out.println(" Inside getFile "+bucketName);
-			// Retrieve image from the classpath.
-			File fnew = new File("D:\\logs\\f0017792.jpg");
+			// Retrieve image from the classpath
+			File fnew = AWSDemoUtil.getFileFromMultipartHttpServletRequest(request, localDir);
+			//File fnew = request.getFile(arg0)
 			BufferedImage originalImage = ImageIO.read(fnew);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ImageIO.write(originalImage, "jpg", baos);
@@ -108,8 +67,7 @@ public class MainController {
 			return DatatypeConverter.printBase64Binary(imageInByte);
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Error " + e.getMessage());
+			logger.error("error while uploadAndRetrieveFromLocalMachine ", e);
 			throw new RuntimeException(e);
 		}
 	}

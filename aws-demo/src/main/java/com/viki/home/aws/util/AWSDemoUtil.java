@@ -13,10 +13,14 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 public class AWSDemoUtil {
-	
+
 	private static final Logger logger = Logger.getLogger(AWSDemoUtil.class);
-	
-	public static File getFileFromMultipartHttpServletRequest(MultipartHttpServletRequest request, String directory) throws IOException{
+
+	public static File getFileFromMultipartHttpServletRequest(
+			MultipartHttpServletRequest request, String directory)
+			throws IOException {
+		
+		
 		
 		File file = null;
 		if (request instanceof MultipartHttpServletRequest) {
@@ -25,29 +29,31 @@ public class AWSDemoUtil {
 			Iterator<String> fileNameIterator = ((MultipartHttpServletRequest) request)
 					.getFileNames();
 
-			MultipartFile mpf = ((MultipartHttpServletRequest) request)
-					.getFile(fileNameIterator.next());
+			if (fileNameIterator.hasNext()) {
+				MultipartFile mpf = ((MultipartHttpServletRequest) request)
+						.getFile(fileNameIterator.next());
 
-			file = new File(directory, mpf.getOriginalFilename());
-			file.createNewFile();
-			logger.info("created new file in system ");
-			FileOutputStream fileOutputStream = new FileOutputStream(file);
-			fileOutputStream.write(mpf.getBytes());
-			logger.info("written content to system file at "+directory);
-			fileOutputStream.close();			
+				file = new File(directory, mpf.getOriginalFilename());
+				file.createNewFile();
+				logger.info("created new file in system ");
+				FileOutputStream fileOutputStream = new FileOutputStream(file);
+				fileOutputStream.write(mpf.getBytes());
+				logger.info("written content to system file at " + directory);
+				fileOutputStream.close();
+			}
 		}
-		
+
 		return file;
 	}
-	
-	
-	public static String getS3Directory() throws FileNotFoundException, IOException{
+
+	public static String getS3Directory() throws FileNotFoundException,
+			IOException {
 		final Properties props = new Properties();
 		props.load(new FileInputStream("/var/www/html/app.properties"));
 		String directory = props.getProperty("temp.directory");
-		
+
 		return directory;
-		
+
 	}
 
 }
