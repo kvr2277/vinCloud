@@ -109,7 +109,7 @@ public class MainController {
 			logger.info("request "+subject+ " content "+content );
 			AWSSQSHelper.sendMessageToSQS(content, queueNm);
 			
-			AWSSQSHelper.receiveMessagesFromSQS(queueNm);
+			//AWSSQSHelper.receiveMessagesFromSQS(queueNm);
 			
 			return "{\"result\":\"success\"}";
 
