@@ -1,0 +1,12 @@
+<div ng-show="showSQS" class="section">
+	<div  ng-controller="sqsCtrl">
+		
+		 
+		  <img ng-src="{{sqsDefaultImageSrc}}"> <br/><br/><br/><br/>
+		 <span>Send message to SQS</span>
+		 <input ng-model="sqsMessage">		 
+		<button ng-click="sendToSQS()">send to SQS</button>
+	</div>
+	
+	
+</div>

@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,9 +19,11 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import com.amazonaws.services.health.AWSHealth;
 import com.viki.home.aws.util.AWSDemoUtil;
 import com.viki.home.aws.util.AWSS3Helper;
+import com.viki.home.aws.util.AWSSNSHelper;
+import com.viki.home.aws.util.AWSSQSHelper;
+import com.viki.home.aws.util.Demo;
 
 @Controller
 public class MainController {
@@ -36,6 +39,9 @@ public class MainController {
 	
 	@Value("${local.directory}")
 	private String localDir;
+	
+	@Value("${aws.sqs.queue.name}")
+	private String queueNm;
 	
 	private static final Logger logger = Logger.getLogger(MainController.class);
 
@@ -90,6 +96,44 @@ public class MainController {
 
 		} catch (Exception e) {
 			logger.error("error while uploadToS3 ", e);
+			throw new RuntimeException(e);
+		}
+	}
+	
+	@RequestMapping(value = "/sendToSQS", method = RequestMethod.POST)
+	public @ResponseBody String sendToSQS(@RequestBody Demo request) {
+		try {
+			String subject = request.getSubject();
+			String content = request.getMessage();
+			
+			logger.info("request "+subject+ " content "+content );
+			AWSSQSHelper.sendMessageToSQS(content, queueNm);
+			
+			AWSSQSHelper.receiveMessagesFromSQS(queueNm);
+			
+			return "{\"result\":\"success\"}";
+
+		} catch (Exception e) {
+			logger.error("error while sendToSQS ", e);
+			throw new RuntimeException(e);
+		}
+	}
+	
+	@RequestMapping(value = "/sendToSNS", method = RequestMethod.POST)
+	public @ResponseBody String sendToSNS(@RequestBody Demo request) {
+		try {
+			String subject = request.getSubject();
+			String content = request.getMessage();
+			
+			logger.info("request "+subject+ " content "+content );
+			AWSSNSHelper.publishToSNSTopic(content);
+			
+			//AWSSQSHelper.receiveMessagesFromSQS();
+			
+			return "{\"result\":\"success\"}";
+
+		} catch (Exception e) {
+			logger.error("error while sendToSNS ", e);
 			throw new RuntimeException(e);
 		}
 	}

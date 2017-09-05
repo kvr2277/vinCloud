@@ -17,6 +17,9 @@
 .body{
   margin-top: 40px;
 }
+#homeSec li {
+   margin:0 0 50px 0;   
+}
 
 .ng-modal-overlay {
   /* A dark translucent div that covers the whole screen */

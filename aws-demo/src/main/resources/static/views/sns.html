@@ -1,0 +1,11 @@
+<div ng-show="showSNS" class="section">
+	<div  ng-controller="snsCtrl">
+		
+		 <img ng-src="{{snsDefaultImageSrc}}"> <br/><br/><br/><br/>
+		 <span>Send message to SNS</span>
+		 <input ng-model="snsMessage">		 
+		<button ng-click="sendToSNS()">send to SNS</button>
+	</div>
+	
+	
+</div>

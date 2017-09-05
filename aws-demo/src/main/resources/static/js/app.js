@@ -5,9 +5,13 @@ app.config(function($routeProvider){
             templateUrl: '/views/s3.html',
             controller: 's3Ctrl'
         })
-        .when('/roles',{
-            templateUrl: '/views/roles.html',
-            controller: 'rolesController'
+        .when('/sqs',{
+            templateUrl: '/views/sqs.html',
+            controller: 'sqsCtrl'
+        })
+         .when('/sns',{
+            templateUrl: '/views/sns.html',
+            controller: 'snsCtrl'
         })
         .otherwise(
             { redirectTo: '/'}

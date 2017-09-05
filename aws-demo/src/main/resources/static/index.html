@@ -15,7 +15,7 @@
   <div align="center"> <h2 >Welcome to AWS Demo</h2></div>
   <div ng-controller='homeCtrl'>
     <div ng-show="!showSection" align="center" style="padding-top: 2cm;">
-    	<h4>Since you are seeing this message, <button ng-click='toggleModal();showSectionFn()'>Click here</button> to know what went underneath </h4>
+    	<h4>Since you are seeing this page, <button ng-click='toggleModal();showSectionFn()'>Click here</button> to know what went underneath </h4>
     </div>
     <modal-dialog show='modalShown' width='400px' height='60%'>
       <ol>
@@ -29,7 +29,6 @@
 	  	<li>Installing tools on EC2 
 	  		<ul>
 	  			<li>Maven</li>
-	  			<li>Tomcat</li>
 	  			<li>Git</li>
 	  		</ul>
 	  	</li>
@@ -38,10 +37,15 @@
     
     <div ng-show="showSection">
     	<div ><h4>Select below links to see AWS services in action </h4></div>
-	    <div  class="home-section">
+	    <div id="homeSec" class="home-section">
 		    <ul class="menu-list">
 		        <li><a href="#/s3" ng-click='showS3Fn()'>S3</a></li>
-		        <li><a href="#/roles">SQS</a></li>
+		        <li><a href="#/sqs" ng-click='showSQSFn()'>SQS</a></li>
+		        <li><a href="#/sns" ng-click='showSNSFn()'>SNS</a></li>
+		        <li><a href="https://console.aws.amazon.com/lex/home?region=us-east-1#bot-editor:bot=BookTrip">Lex</a></li>
+		        <li>Polly</a></li>
+		        <li>DynamoDB</a></li>
+		        <li>RDS</a></li>
 		    </ul>
 		</div>
 	</div>

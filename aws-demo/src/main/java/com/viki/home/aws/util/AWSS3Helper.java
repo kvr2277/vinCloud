@@ -90,7 +90,7 @@ public class AWSS3Helper {
 		                  new GetObjectRequest(bucketName, keyName));
 		InputStream objectData = object.getObjectContent();
 		// Process the objectData stream.
-		objectData.close();
+		
 		
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		int next = objectData.read();
@@ -100,6 +100,8 @@ public class AWSS3Helper {
 		}
 		bos.flush();
 		byte[] result = bos.toByteArray();
+		
+		objectData.close();
 		
 		return result;
 	}

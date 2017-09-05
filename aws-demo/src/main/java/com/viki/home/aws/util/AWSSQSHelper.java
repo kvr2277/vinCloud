@@ -53,15 +53,13 @@ import com.amazonaws.services.sqs.model.SendMessageRequest;
  */
 public class AWSSQSHelper {
 
-	private static final String QUEUE_NAME = "vikiQueue";
-
 	private static final Logger logger = Logger.getLogger(AWSSQSHelper.class);
 
-	public static void createQueueAndSendMessageToSQS(String message) {
+	public static void createQueueAndSendMessageToSQS(String message, String queueNm) {
 		final AmazonSQS sqs = AmazonSQSClientBuilder.defaultClient();
 		
 		try {
-			CreateQueueResult create_result = sqs.createQueue(QUEUE_NAME);
+			CreateQueueResult create_result = sqs.createQueue(queueNm);
 			logger.info("createQueueAndSendMessageToSQS create_result");
 		} catch (AmazonSQSException e) {
 			if (!e.getErrorCode().equals("QueueAlreadyExists")) {
@@ -69,7 +67,7 @@ public class AWSSQSHelper {
 			}
 		}
 
-		String queueUrl = sqs.getQueueUrl(QUEUE_NAME).getQueueUrl();
+		String queueUrl = sqs.getQueueUrl(queueNm).getQueueUrl();
 
 		SendMessageRequest send_msg_request = new SendMessageRequest()
 				.withQueueUrl(queueUrl).withMessageBody(message)
@@ -80,18 +78,18 @@ public class AWSSQSHelper {
 				+ message);
 	}
 
-	public static void sendMessageToSQS(String message) {
+	public static void sendMessageToSQS(String message, String queueNm) {
 		final AmazonSQS sqs = AmazonSQSClientBuilder.defaultClient();
-		String queueUrl = sqs.getQueueUrl(QUEUE_NAME).getQueueUrl();
+		String queueUrl = sqs.getQueueUrl(queueNm).getQueueUrl();
 		SendMessageRequest send_msg_request = new SendMessageRequest()
 				.withQueueUrl(queueUrl).withMessageBody(message)
 				.withDelaySeconds(5);
 		sqs.sendMessage(send_msg_request);
 	}
 
-	public static List<String> receiveMessagesFromSQS() {
+	public static List<String> receiveMessagesFromSQS(String queueNm) {
 		final AmazonSQS sqs = AmazonSQSClientBuilder.defaultClient();
-		String queueUrl = sqs.getQueueUrl(QUEUE_NAME).getQueueUrl();;
+		String queueUrl = sqs.getQueueUrl(queueNm).getQueueUrl();;
 		ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(queueUrl).withAttributeNames("All");
 		
 		receiveMessageRequest.setMaxNumberOfMessages(10);

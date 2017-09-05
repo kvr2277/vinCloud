@@ -37,20 +37,28 @@ app.controller('homeCtrl', ['$scope','$rootScope',  function($scope, $rootScope)
 		  };
 	  
 	  $scope.showS3Fn = function() {
-		  $rootScope.$emit('childEmit', true);
+		  $rootScope.$emit('s3Emit', true);
+	  };
+	  
+	  $scope.showSQSFn = function() {
+		  $rootScope.$emit('sqsEmit', true);
+	  };
+	  
+	  $scope.showSNSFn = function() {
+		  $rootScope.$emit('snsEmit', true);
 	  };
 	 
 }]);
 
-app.controller('s3Ctrl', [ '$scope', '$http', '$rootScope','$timeout',
-		function($scope, $http, $rootScope, $timeout) {
+app.controller('s3Ctrl', [ '$scope', '$http', '$rootScope',
+		function($scope, $http, $rootScope) {
 	
 
 			$scope.s3DefaultImageSrc = '/images/s3_image.png';
 			$scope.showS3 = false;
 			$scope.s3Msg = "";
 			 
-			 $rootScope.$on('childEmit', function(event, data) {
+			 $rootScope.$on('s3Emit', function(event, data) {
 				 $scope.showS3 = data;	
 			});
 			 
@@ -68,7 +76,7 @@ app.controller('s3Ctrl', [ '$scope', '$http', '$rootScope','$timeout',
 				//below is the file name that gets pushed to controller
 				fd.append(file.name, file);
 				
-				var mno = $http.post(uploadUrl, fd, {
+				$http.post(uploadUrl, fd, {
 					transformRequest : angular.identity,
 					transformResponse: angular.identity,
 					headers : {
@@ -85,6 +93,73 @@ app.controller('s3Ctrl', [ '$scope', '$http', '$rootScope','$timeout',
 }]);
 
 
+app.controller('sqsCtrl', [ '$scope', '$http', '$rootScope',
+                   		function($scope, $http, $rootScope) {
+	
+	$scope.sqsDefaultImageSrc = '/images/sqs_image1.jpg';
+	$scope.showSQS = false;
+	
+	 $rootScope.$on('sqsEmit', function(event, data) {
+		 $scope.showSQS = data;	
+	});
+	 
+	 $scope.sendToSQS = function() {
+
+			var sqsMessage = $scope.sqsMessage;
+
+			console.log('message is '+sqsMessage);
+			var uploadUrl = "/sendToSQS";
+			
+			var formData = {
+					
+					"subject" : $scope.sqsMessage,
+					"message" : $scope.sqsMessage	
+			};
+			
+			$http.post(uploadUrl, formData).success(function(response) {					
+				alert("successfully sent to SQS");					
+			}).error(function() {				
+				alert("something went wrong");
+			});
+			
+			
+
+		};
+}]);
+
+app.controller('snsCtrl', [ '$scope', '$http', '$rootScope',
+                       		function($scope, $http, $rootScope) {
+    	
+    	$scope.snsDefaultImageSrc = '/images/sns_image.png';
+    	$scope.showSNS = false;
+    	
+    	 $rootScope.$on('snsEmit', function(event, data) {
+    		 $scope.showSNS = data;	
+    	});
+    	 
+    	 $scope.sendToSNS = function() {
+
+    			var snsMessage = $scope.snsMessage;
+
+    			console.log('message is '+snsMessage);
+    			var uploadUrl = "/sendToSNS";
+    			
+    			var formData = {
+    					
+    					"subject" : $scope.snsMessage,
+    					"message" : $scope.snsMessage	
+    			};
+    			
+    			$http.post(uploadUrl, formData).success(function(response) {					
+    				alert("successfully sent to SNS");					
+    			}).error(function() {				
+    				alert("something went wrong");
+    			});
+    			
+    			
+
+    		};
+    }]);
 
 app.directive('modalDialog', function() {
 	  return {
