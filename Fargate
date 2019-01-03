@@ -1,0 +1,19 @@
+Windows pushing images
+
+https://medium.com/@ariklevliber/aws-fargate-from-start-to-finish-for-a-nodejs-app-9a0e5fbf6361
+
+For windows folks —
+
+> aws ecr get-login — no-include-email — region <your-region/us-east-1>
+
+which would output below — docker login -u AWS -p somepassword https://123456789.ecr.us-east-1.amazonaws.com
+
+If you don’t see login succeeded message, manually copy the output and execute same except by removing https:// (like below
+
+> docker login -u AWS -p somepassword 123456789.ecr.us-east-1.amazonaws.com
+
+And remaining steps will remain same
+
+> docker build -t webapp-backend-stg .
+> docker tag webapp-backend-stg:latest 123456789.dkr.ecr.us-east-1.amazonaws.com/webapp-backend-stg:latest
+> docker push 123456789.dkr.ecr.us-east-1.amazonaws.com/webapp-backend-stg:latest
