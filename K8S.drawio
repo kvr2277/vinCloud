@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2021-11-21T13:27:23.528Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36" etag="e4I1053Aat2UBNO20YxY" version="15.8.3" type="github">
+<mxfile host="app.diagrams.net" modified="2021-11-21T13:32:01.698Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36" etag="tbnr0kKCyL-xk8zhWvH-" version="15.8.3" type="github">
   <diagram id="3-LJM8cy5WZiCc4egxbc" name="Page-1">
-    <mxGraphModel dx="1186" dy="764" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1186" dy="707" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -30,6 +30,15 @@
         </mxCell>
         <mxCell id="yGHzoKNZI_u5UiGkasQw-9" value="AWS" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
           <mxGeometry x="290" y="140" width="40" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="yGHzoKNZI_u5UiGkasQw-10" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.24;exitY=0.563;exitDx=0;exitDy=0;exitPerimeter=0;dashed=1;" edge="1" parent="1" source="yGHzoKNZI_u5UiGkasQw-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="420" as="sourcePoint" />
+            <mxPoint x="180" y="230" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="yGHzoKNZI_u5UiGkasQw-11" value="response" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="230" y="230" width="60" height="20" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
